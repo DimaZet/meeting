@@ -12,14 +12,16 @@ public class MeetingEvent {
     private UUID id;
     private String title;
     private String description;
-    @CreatedDate
-    private Instant createdAt;
 
     public MeetingEvent(UUID id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
     }
+
+    @CreatedDate
+    private Instant createdAt;
+
 
     public UUID getId() {
         return id;
@@ -31,5 +33,9 @@ public class MeetingEvent {
 
     public String getDescription() {
         return description;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 }
