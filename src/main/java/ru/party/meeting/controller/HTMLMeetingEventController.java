@@ -21,7 +21,6 @@ public class HTMLMeetingEventController {
         this.meetingEventService = meetingEventService;
     }
 
-
     @GetMapping("/events")
     public String getAllEvents(Model model) {
 
@@ -37,9 +36,6 @@ public class HTMLMeetingEventController {
         model.addAttribute("eventsList", meetingEventService.getAllEvents());
         model.addAttribute("added", true);
         return "events-list";
-
-
-
     }
 
 }

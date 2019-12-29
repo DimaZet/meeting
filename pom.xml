@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.party</groupId>
 	<artifactId>meeting</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>meeting</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -29,6 +29,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -55,7 +56,7 @@
 		<dependency>
 			<groupId>de.flapdoodle.embed</groupId>
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-<!--			<scope>test</scope>-->
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
