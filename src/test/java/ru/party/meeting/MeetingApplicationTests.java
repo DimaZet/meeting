@@ -23,7 +23,7 @@ class MeetingApplicationTests {
     void testPostEvent() throws Exception {
 		String title = "let's go cinema";
 		String description = "tomorrow i'd like to go cinema with girl";
-		this.mockMvc.perform(post("/events?title={title}&description={description}", title, description))
+		this.mockMvc.perform(post("/api/events?title={title}&description={description}", title, description))
 				.andDo(print())
 				.andExpect(status().is(200))
 				.andExpect(jsonPath("id").isNotEmpty())
@@ -34,7 +34,7 @@ class MeetingApplicationTests {
 
 	@Test
     void testGetEvents() throws Exception {
-		this.mockMvc.perform(get("/events"))
+		this.mockMvc.perform(get("/api/events"))
 				.andDo(print())
 				.andExpect(status().is(200));
 	}

@@ -1,0 +1,42 @@
+<!doctype html >
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>События</title>
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="header">
+    <h1>События</h1>
+</div>
+
+
+<div class="container">
+
+
+    <form class="add-event" action="" method="POST">
+        <input name="title" type="text" placeholder="Заголовок">
+        <input name="description" type="text" placeholder="Описание">
+        <input name="add" type="submit" value="Добавить" />
+    </form>
+    <span th:if="${added}" class="add-success">Успешно добавлено!</span>
+
+    <div class="event-item" th:each="event : ${eventsList}">
+        <h2 th:text="${event.title}"></h2>
+        <p th:text="${event.description}"></p>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
+
+
+
+
