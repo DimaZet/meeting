@@ -20,7 +20,7 @@ class MeetingApplicationTests {
 	private MockMvc mockMvc;
 
 	@Test
-	void testPostingImage() throws Exception {
+    void testPostEvent() throws Exception {
 		String title = "let's go cinema";
 		String description = "tomorrow i'd like to go cinema with girl";
 		this.mockMvc.perform(post("/events?title={title}&description={description}", title, description))
@@ -33,7 +33,7 @@ class MeetingApplicationTests {
 	}
 
 	@Test
-	void testGetImages() throws Exception {
+    void testGetEvents() throws Exception {
 		this.mockMvc.perform(get("/events"))
 				.andDo(print())
 				.andExpect(status().is(200));
