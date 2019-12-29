@@ -26,6 +26,7 @@ public class HTMLMeetingEventController {
     public String getAllEvents(Model model) {
 
         model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        model.addAttribute("added", false);
         return "events-list";
     }
 
@@ -34,6 +35,7 @@ public class HTMLMeetingEventController {
             @RequestParam(name = "title") String title, @RequestParam(name = "description") String description, Model model) {
         meetingEventService.createEvent(title, description);
         model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        model.addAttribute("added", true);
         return "events-list";
 
 
