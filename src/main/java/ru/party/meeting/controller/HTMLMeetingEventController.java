@@ -1,7 +1,5 @@
 package ru.party.meeting.controller;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,26 +10,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.party.meeting.model.MeetingEvent;
 import ru.party.meeting.service.MeetingEventService;
 
+import java.util.List;
+
 @Controller
-@RequestMapping(path = "/api")
-public class MeetingEventController {
+public class HTMLMeetingEventController {
 
     private final MeetingEventService meetingEventService;
 
-    public MeetingEventController(MeetingEventService meetingEventService) {
+    public HTMLMeetingEventController(MeetingEventService meetingEventService) {
         this.meetingEventService = meetingEventService;
     }
 
-    @PostMapping("/events")
-    public ResponseEntity<MeetingEvent> createEvent(
-            @RequestParam(name = "title") String title, @RequestParam(name = "description") String description) {
-        return ResponseEntity.ok(
-                meetingEventService.createEvent(title, description));
-    }
 
     @GetMapping("/events")
-    public ResponseEntity<List<MeetingEvent>> getAllEvents() {
-        return ResponseEntity.ok(
-                meetingEventService.getAllEvents());
+    public String getAllEvents(Model model) {
+
+        model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        return "events-list";
     }
+
+    @PostMapping("/events")
+    public String createEvent(
+            @RequestParam(name = "title") String title, @RequestParam(name = "description") String description, Model model) {
+        meetingEventService.createEvent(title, description);
+        model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        return "events-list";
+
+
+
+    }
+
 }
