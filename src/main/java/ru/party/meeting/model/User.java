@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User extends RelationDatabaseEntity {
 
-    @Column(name = "login")
-    private String login;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -40,8 +40,8 @@ public class User extends RelationDatabaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;
 
-    public User(String login, String password, String firstName, String lastName) {
-        this.login = login;
+    public User(String username, String password, String firstName, String lastName) {
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,7 +50,7 @@ public class User extends RelationDatabaseEntity {
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
+                "username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", roles=" + roles +
@@ -69,7 +69,7 @@ public class User extends RelationDatabaseEntity {
             return false;
         }
         User user = (User) o;
-        return Objects.equals(login, user.login) &&
+        return Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName);
@@ -77,6 +77,6 @@ public class User extends RelationDatabaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), login, password, firstName, lastName);
+        return Objects.hash(super.hashCode(), username, password, firstName, lastName);
     }
 }

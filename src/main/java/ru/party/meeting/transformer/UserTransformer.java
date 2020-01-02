@@ -12,7 +12,7 @@ public class UserTransformer {
     public UserTO transform(User user) {
         return new UserTO(
                 user.getId(),
-                user.getLogin(),
+                user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getRoles().stream()

@@ -28,9 +28,9 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public User register(User user) throws UserAlreadyRegisteredException {
-        if (userRepository.findByLogin(user.getLogin()).isPresent()) {
-            log.info("In register - user with login: {} already registered", user.getLogin());
+    public User registerWithDefaultRole(User user) throws UserAlreadyRegisteredException {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            log.info("In register - user with username: {} already registered", user.getUsername());
             throw new UserAlreadyRegisteredException();
         }
         user.setPassword(
@@ -49,8 +49,8 @@ public class UserService {
         return users;
     }
 
-    public User findByLogin(String login) throws NotFoundException {
-        return userRepository.findByLogin(login)
+    public User findByUsername(String username) throws NotFoundException {
+        return userRepository.findByUsername(username)
                 .orElseThrow(NotFoundException::new);
     }
 
