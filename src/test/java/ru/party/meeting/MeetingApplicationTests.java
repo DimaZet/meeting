@@ -58,6 +58,10 @@ public class MeetingApplicationTests {
 		mockMvc.perform(get("/api/roles"))
 				.andDo(print())
 				.andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users"))
+                .andDo(print())
+                .andExpect(status().isOk());
 	}
 
 	@Test
@@ -81,7 +85,7 @@ public class MeetingApplicationTests {
 	}
 
 	private ResultActions register(String userJson) throws Exception {
-		return mockMvc.perform(post("/api/users/register")
+        return mockMvc.perform(post("/api/users")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(userJson))
 				.andDo(print());

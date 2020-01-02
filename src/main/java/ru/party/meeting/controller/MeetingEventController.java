@@ -12,7 +12,7 @@ import ru.party.meeting.model.MeetingEvent;
 import ru.party.meeting.service.MeetingEventService;
 
 @Controller
-@RequestMapping(path = "/api")
+@RequestMapping("/api/events")
 public class MeetingEventController {
 
     private final MeetingEventService meetingEventService;
@@ -21,14 +21,14 @@ public class MeetingEventController {
         this.meetingEventService = meetingEventService;
     }
 
-    @PostMapping("/events")
+    @PostMapping
     public ResponseEntity<MeetingEvent> createEvent(
             @RequestParam(name = "title") String title, @RequestParam(name = "description") String description) {
         return ResponseEntity.ok(
                 meetingEventService.createEvent(title, description));
     }
 
-    @GetMapping("/events")
+    @GetMapping
     public ResponseEntity<List<MeetingEvent>> getAllEvents() {
         return ResponseEntity.ok(
                 meetingEventService.getAllEvents());

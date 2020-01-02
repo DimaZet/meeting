@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +16,7 @@ import ru.party.meeting.service.RoleService;
 import ru.party.meeting.transformer.UserTransformer;
 
 @Controller
-@RequestMapping(path = "/api")
+@RequestMapping("/api/roles")
 public class RoleController {
 
     private final RoleService roleService;
@@ -26,21 +27,23 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PostMapping(path = "/roles")
+    @PostMapping
     public ResponseEntity<RoleTO> createRole(@RequestParam(name = "name") String name) {
         return ResponseEntity.ok(
                 userTransformer.transform(roleService.createRole(name)));
     }
 
-    @GetMapping(path = "/roles")
-    public ResponseEntity<List<RoleTO>> findRoleByName(@RequestParam(required = false, name = "name") String name) {
-        if (name == null) {
-            return ResponseEntity.ok(
-                    roleService.getAll().stream()
-                            .map(userTransformer::transform)
-                            .collect(Collectors.toList()));
-        }
+    @GetMapping
+    public ResponseEntity<List<RoleTO>> getAll() {
         return ResponseEntity.ok(
-                List.of(userTransformer.transform(roleService.findByName(name))));
+                roleService.getAll().stream()
+                        .map(userTransformer::transform)
+                        .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/{name}")
+    public ResponseEntity<RoleTO> getByRoleName(@PathVariable(name = "name") String name) {
+        return ResponseEntity.ok(
+                userTransformer.transform(roleService.findByName(name)));
     }
 }
