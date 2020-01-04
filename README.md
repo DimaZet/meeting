@@ -10,7 +10,9 @@
     ```
 2. Run postgres in docker:
    ```
-   docker run  --rm --name psql -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:alpine  
+   docker run --rm -v $(PWD)/src/main/resources/postgres/:/docker-entrypoint-initdb.d/ \
+        -e POSTGRES_DB=meeting -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
+        --name psql -p 5432:5432 -d postgres:alpine
    ```
 2. IDEA: in `Run/Debug Configurations` window
     * Add `MONGO_CLUSTER` into "Environment variables" (the same values as at step 1) 
