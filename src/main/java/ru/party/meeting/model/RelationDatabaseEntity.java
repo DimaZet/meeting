@@ -23,11 +23,11 @@ class RelationDatabaseEntity {
     private Long id;
 
     @CreatedDate
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private Instant createdAt;
 
     @LastModifiedDate
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Enumerated(EnumType.STRING)
