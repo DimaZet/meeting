@@ -1,0 +1,21 @@
+jwt:
+  token:
+    secret: mysecretword
+    expired: 3_600_000
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_CLUSTER}/meeting
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    database-platform: postgres
+    properties:
+      hibernate:
+        dialect:
+          org.hibernate.dialect.PostgreSQLDialect
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_CLUSTER}/meeting

@@ -1,9 +1,11 @@
 package ru.party.meeting.service;
 
+import java.time.Instant;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.party.meeting.exception.NotFoundException;
 import ru.party.meeting.exception.UserAlreadyRegisteredException;
@@ -12,21 +14,19 @@ import ru.party.meeting.model.User;
 import ru.party.meeting.repository.RoleRepository;
 import ru.party.meeting.repository.UserRepository;
 
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-
 @Service
 @Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-//    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User registerWithDefaultRole(User user) throws UserAlreadyRegisteredException {
@@ -34,11 +34,13 @@ public class UserService {
             log.info("In register - user with username: {} already registered", user.getUsername());
             throw new UserAlreadyRegisteredException();
         }
-//        user.setPassword(
-//                passwordEncoder.encode(user.getPassword()));
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword()));
         user.setRoles(
-                List.of(roleRepository.findByName("USER")));
+                List.of(roleRepository.findByName("ROLE_USER")));
         user.setStatus(Status.ACTIVE);
+        user.setCreatedAt(Instant.now()); //TODO
+        user.setUpdatedAt(Instant.now()); //TODO
         User registeredUser = userRepository.save(user);
         log.info("In register - user: {} successfully registered", registeredUser);
         return registeredUser;
