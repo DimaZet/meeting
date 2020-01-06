@@ -18,10 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Role extends RelationDatabaseEntity {
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    List<User> users;
     @Column(name = "name")
     private String name;
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    List<User> users;
 
     public Role(String name) {
         this.name = name;
