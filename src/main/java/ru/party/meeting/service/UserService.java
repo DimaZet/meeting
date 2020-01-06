@@ -1,6 +1,5 @@
 package ru.party.meeting.service;
 
-import java.time.Instant;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +38,6 @@ public class UserService {
         user.setRoles(
                 List.of(roleRepository.findByName("ROLE_USER")));
         user.setStatus(Status.ACTIVE);
-        user.setCreatedAt(Instant.now()); //TODO
-        user.setUpdatedAt(Instant.now()); //TODO
         User registeredUser = userRepository.save(user);
         log.info("In register - user: {} successfully registered", registeredUser);
         return registeredUser;

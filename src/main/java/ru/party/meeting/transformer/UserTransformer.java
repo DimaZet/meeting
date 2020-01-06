@@ -12,8 +12,6 @@ public class UserTransformer {
     public UserTO transform(User user) {
         return new UserTO(
                 user.getId(),
-                user.getCreatedAt(),
-                user.getUpdatedAt(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
@@ -25,8 +23,6 @@ public class UserTransformer {
     public RoleTO transform(Role role) {
         return new RoleTO(
                 role.getId(),
-                role.getCreatedAt(),
-                role.getUpdatedAt(),
                 role.getName());
     }
 }

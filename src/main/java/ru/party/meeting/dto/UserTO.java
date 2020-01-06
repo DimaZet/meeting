@@ -1,6 +1,5 @@
 package ru.party.meeting.dto;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -12,8 +11,6 @@ import lombok.Setter;
 @Setter
 public class UserTO {
     private Long id;
-    private Instant createdAt;
-    private Instant updatedAt;
     private String username;
     private String firstName;
     private String lastName;
@@ -22,15 +19,11 @@ public class UserTO {
     @JsonCreator
     public UserTO(
             @JsonProperty("id") Long id,
-            @JsonProperty("createdAt") Instant createdAt,
-            @JsonProperty("updatedAt") Instant updatedAt,
             @JsonProperty("username") String username,
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
             @JsonProperty("roles") List<RoleTO> roles) {
         this.id = id;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
