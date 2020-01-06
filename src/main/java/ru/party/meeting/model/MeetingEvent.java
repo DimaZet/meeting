@@ -11,23 +11,38 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document
 @Data
 public class MeetingEvent {
 
     @Id
+    @Field
     private UUID id;
+
+    @Field
     private String title;
+
+    @Field
     private String description;
+
     @CreatedDate
+    @Field
     private Instant createdAt;
+
     @LastModifiedDate
+    @Field
     private Instant updatedAt;
+
     @CreatedBy
+    @Field
     private String createdBy;
+  
     @LastModifiedBy
+    @Field
     private String lastModifiedBy;
+  
     @Version
     private long version;
 
