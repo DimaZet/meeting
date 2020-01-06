@@ -5,6 +5,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
   CREATE TABLE users (\
     id BIGSERIAL PRIMARY KEY,\
     status VARCHAR(100) CHECK ( status in ('ACTIVE', 'DELETED', 'BANNED') ) DEFAULT 'ACTIVE',\
+    registerad_at TIMESTAMPTZ NOT NULL DEFAULT current_timestamp,\
     username VARCHAR(100) NOT NULL,\
     password VARCHAR(255) NOT NULL,\
     first_name VARCHAR(100),\
@@ -14,6 +15,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
   CREATE TABLE roles (\
     id BIGSERIAL PRIMARY KEY,\
     status VARCHAR(100) CHECK ( status in ('ACTIVE', 'DELETED', 'BANNED') ) DEFAULT 'ACTIVE',\
+    registerad_at TIMESTAMPTZ NOT NULL DEFAULT current_timestamp,\
     name VARCHAR(100)\
   );
 
