@@ -28,15 +28,16 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerWithDefaultRole(User user) throws UserAlreadyRegisteredException {
+    public User registerWithDefaultRole(User user)
+            throws UserAlreadyRegisteredException, NotFoundException {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             log.info("In register - user with username: {} already registered", user.getUsername());
             throw new UserAlreadyRegisteredException();
         }
         user.setPassword(
                 passwordEncoder.encode(user.getPassword()));
-        user.setRoles(
-                List.of(roleRepository.findByName("ROLE_USER")));
+        user.setRoles(List.of(
+                roleRepository.findByName("ROLE_USER").orElseThrow(NotFoundException::new)));
         user.setStatus(Status.ACTIVE);
         User registeredUser = userRepository.save(user);
         log.info("In register - user: {} successfully registered", registeredUser);
@@ -59,19 +60,23 @@ public class UserService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public User delete(Long id) throws NotFoundException {
+    public void delete(Long id) throws NotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        user.setStatus(Status.DELETED);
-        log.info("In delete - user: {} succefully deleted", user);
-        return userRepository.save(user);
+        if (!user.getStatus().equals(Status.DELETED)) {
+            user.setStatus(Status.DELETED);
+            userRepository.save(user);
+        }
+        log.info("In delete - user: {} successfully deleted", user);
     }
 
-    public User ban(Long id) throws NotFoundException {
+    public void ban(Long id) throws NotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        user.setStatus(Status.BANNED);
-        log.info("In ban - user: {} succefully banned", user);
-        return userRepository.save(user);
+        if (!user.getStatus().equals(Status.BANNED)) {
+            user.setStatus(Status.BANNED);
+            userRepository.save(user);
+        }
+        log.info("In ban - user: {} successfully banned", user);
     }
 }

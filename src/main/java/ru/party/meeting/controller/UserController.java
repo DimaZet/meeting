@@ -30,17 +30,14 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest)
+            throws NotFoundException, UserAlreadyRegisteredException {
         User user = new User(createUserRequest.getUsername(),
                 createUserRequest.getPassword(),
                 createUserRequest.getFirstName(),
                 createUserRequest.getLastName());
-        try {
-            return ResponseEntity.ok(
-                    userTransformer.transform(userService.registerWithDefaultRole(user)));
-        } catch (UserAlreadyRegisteredException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(
+                userTransformer.transform(userService.registerWithDefaultRole(user)));
     }
 
     @GetMapping
@@ -52,13 +49,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserTO> findById(@PathVariable(name = "userId") Long userId) {
-        try {
-            return ResponseEntity.ok(
-                    userTransformer.transform(userService.findById(userId)));
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<UserTO> findById(@PathVariable(name = "userId") Long userId)
+            throws NotFoundException {
+        return ResponseEntity.ok(
+                userTransformer.transform(userService.findById(userId)));
     }
 
 }

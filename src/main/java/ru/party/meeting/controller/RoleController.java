@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.party.meeting.dto.RoleTO;
+import ru.party.meeting.exception.NotFoundException;
 import ru.party.meeting.service.RoleService;
 import ru.party.meeting.transformer.UserTransformer;
 
@@ -42,7 +43,8 @@ public class RoleController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<RoleTO> getByRoleName(@PathVariable(name = "name") String name) {
+    public ResponseEntity<RoleTO> getByRoleName(@PathVariable(name = "name") String name)
+            throws NotFoundException {
         return ResponseEntity.ok(
                 userTransformer.transform(roleService.findByName(name)));
     }
