@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: #TODO
+    url: #TODO
+    username: #TODO
+    password: #TODO
+  jpa:
+    show-sql: false
+    database-platform: #TODO
+    properties:
+      hibernate:
+        dialect: #TODO
+  data:
+    mongodb:
+      uri: #TODO
