@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.party.meeting.dto.CreateUserRequest;
 import ru.party.meeting.dto.LoginUserRequest;
+import ru.party.meeting.dto.MeetingEventTO;
 import ru.party.meeting.dto.UserTO;
 import ru.party.meeting.service.RoleService;
 
@@ -23,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -115,22 +115,30 @@ class MeetingApplicationTests {
 	void testPostEvent() throws Exception {
 		String title = "let's go cinema";
 		String description = "tomorrow i'd like to go cinema with girl";
-		mockMvc.perform(post("/api/events?title={title}&description={description}", title, description)
+        String postedEventJson = mockMvc.perform(post("/api/events?title={title}&description={description}", title,
+                description)
 				.header("Authorization", "Bearer " + token))
 				.andDo(print())
 				.andExpect(status().is(200))
-				.andExpect(jsonPath("id").isNotEmpty())
-				.andExpect(jsonPath("title").value(title))
-				.andExpect(jsonPath("description").value(description))
-				.andExpect(jsonPath("createdAt").isNotEmpty());
-	}
+                .andReturn().getResponse().getContentAsString();
+        MeetingEventTO postedEvent = mapper.readValue(postedEventJson, MeetingEventTO.class);
+        assertThat(postedEvent).satisfies(e -> {
+            assertThat(e.getTitle()).isEqualTo(title);
+            assertThat(e.getDescription()).isEqualTo(description);
+            assertThat(e.getTitle()).isEqualTo(title);
+            assertThat(e).hasNoNullFieldsOrProperties();
+        });
 
-	@Test
-	void testGetEvents() throws Exception {
-		mockMvc.perform(get("/api/events")
-				.header("Authorization", "Bearer " + token))
-				.andDo(print())
-				.andExpect(status().is(200));
+        String postedEventsJson = mockMvc.perform(get("/api/events")
+                .header("Authorization", "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn().getResponse().getContentAsString();
+        List<MeetingEventTO> postedEvents = mapper.readValue(postedEventsJson,
+                mapper.getTypeFactory().constructCollectionType(List.class, MeetingEventTO.class));
+        assertThat(postedEvents).allSatisfy(
+                meetingEventTO -> assertThat(meetingEventTO).hasNoNullFieldsOrProperties()
+        );
 	}
 
 	private ResultActions register(String userJson) throws Exception {

@@ -3,10 +3,13 @@ package ru.party.meeting.model;
 import java.time.Instant;
 import java.util.UUID;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -14,12 +17,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class MeetingEvent {
 
     @Id
-    @Setter(AccessLevel.NONE)
-    private final UUID id;
+    private UUID id;
     private String title;
     private String description;
-    //@CreatedDate TODO auditor
+    @CreatedDate
     private Instant createdAt;
+    @LastModifiedDate
+    private Instant updatedAt;
+    @CreatedBy
+    private String createdBy;
+    @LastModifiedBy
+    private String lastModifiedBy;
+    @Version
+    private long version;
 
     public MeetingEvent(UUID id, String title, String description) {
         this.id = id;

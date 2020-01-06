@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserTO {
-    private long id;
+    private Long id;
     private Instant createdAt;
     private Instant updatedAt;
     private String username;
@@ -21,7 +21,7 @@ public class UserTO {
 
     @JsonCreator
     public UserTO(
-            @JsonProperty("id") long id,
+            @JsonProperty("id") Long id,
             @JsonProperty("createdAt") Instant createdAt,
             @JsonProperty("updatedAt") Instant updatedAt,
             @JsonProperty("username") String username,

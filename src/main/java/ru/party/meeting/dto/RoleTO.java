@@ -10,14 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RoleTO {
-    private long id;
+    private Long id;
     private Instant createdAt;
     private Instant updatedAt;
     private String name;
 
     @JsonCreator
     public RoleTO(
-            @JsonProperty("id") long id,
+            @JsonProperty("id") Long id,
             @JsonProperty("createdAt") Instant createdAt,
             @JsonProperty("updatedAt") Instant updatedAt,
             @JsonProperty("name") String name) {
