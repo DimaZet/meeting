@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,12 +41,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 token = request.getHeader(AUTHORIZATION_HEADER).substring(JwtTokenUtil.TOKEN_PREFIX.length());
                 username = jwtTokenUtil.getUsernameFromToken(token);
+            } catch (MalformedJwtException e) {
+                logger.warn("bad jwt token cause of: ", e.getCause());
             } catch (IllegalArgumentException e) {
                 logger.error("an error occurred during getting username from token", e);
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
             } catch (SignatureException e) {
                 logger.error("Authentication Failed. Username or Password not valid.");
+            } catch (Throwable t) {
+                logger.error("{}", t);
             }
         } else {
             logger.warn("couldn't find bearer string, will ignore the header");

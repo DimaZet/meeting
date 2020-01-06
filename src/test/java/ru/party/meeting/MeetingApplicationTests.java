@@ -1,6 +1,7 @@
 package ru.party.meeting;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -112,7 +113,7 @@ class MeetingApplicationTests {
 	}
 
 	@Test
-	void testPostEvent() throws Exception {
+    void testPostEvent_successfully() throws Exception {
 		String title = "let's go cinema";
 		String description = "tomorrow i'd like to go cinema with girl";
         String postedEventJson = mockMvc.perform(post("/api/events?title={title}&description={description}", title,
@@ -140,6 +141,37 @@ class MeetingApplicationTests {
                 meetingEventTO -> assertThat(meetingEventTO).hasNoNullFieldsOrProperties()
         );
 	}
+
+    @Test
+    void testUnauthorizedPostEvent() throws Exception {
+        String title = "let's go cinema";
+        String description = "tomorrow i'd like to go cinema with girl";
+        mockMvc.perform(post("/api/events?title={title}&description={description}",
+                title, description))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testNotFoundedEvent() throws Exception {
+        UUID eventId = UUID.randomUUID();
+        mockMvc.perform(get("/api/events/{eventId}", eventId)
+                .header("Authorization", "Bearer " + token))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testWrongToken() throws Exception {
+        mockMvc.perform(get("/api/events")
+                .header("Authorization", "Bearer " + "wrong"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/events"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
 
 	private ResultActions register(String userJson) throws Exception {
 		return mockMvc.perform(post("/api/users/register")
