@@ -38,8 +38,8 @@
    Content-Type: application/json
    
    {
-   	"username": "dima",
-   	"password": "dima"
+   	"username": "YOUR_LOGIN",
+   	"password": "YOUR_PASWORD"
    }
    ```
 3. Use token on step 2 in headers like example:

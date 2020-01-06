@@ -1,0 +1,4 @@
+jwt:
+  token:
+    secret: mysecretword
+    expired: 3_600_000

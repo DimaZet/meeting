@@ -73,7 +73,9 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
                 .jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(
-                        "select username, password, enabled from users where username=?")
+                        "select username, password, " +
+                                "case when status = 'ACTIVE' then true else false end as status " +
+                                "from users where username=?")
                 .authoritiesByUsernameQuery(
                         "select u.username, r.name from users u, roles r, user_roles ur " +
                                 "where ur.user_id = u.id and ur.role_id = r.id and username=?");

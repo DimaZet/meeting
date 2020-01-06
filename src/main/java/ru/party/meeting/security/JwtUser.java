@@ -87,11 +87,11 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
-    public String getFirstname() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public String getLastname() {
+    public String getLastName() {
         return lastName;
     }
 

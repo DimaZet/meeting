@@ -1,6 +1,6 @@
 jwt:
   token:
-    secret: mysecretword
+    secret: ${JWT_SECRET}
     expired: 3_600_000
 
 spring:

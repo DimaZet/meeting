@@ -6,14 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.party.meeting.dto.CreateUserRequest;
 import ru.party.meeting.dto.UserTO;
+import ru.party.meeting.exception.NotFoundException;
 import ru.party.meeting.exception.UserAlreadyRegisteredException;
 import ru.party.meeting.model.User;
-import ru.party.meeting.service.RoleService;
 import ru.party.meeting.service.UserService;
 import ru.party.meeting.transformer.UserTransformer;
 
@@ -22,17 +23,15 @@ import ru.party.meeting.transformer.UserTransformer;
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
     private final UserTransformer userTransformer = new UserTransformer();
 
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @PostMapping("register")
     public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest) {
-        User user = new User(createUserRequest.getLogin(),
+        User user = new User(createUserRequest.getUsername(),
                 createUserRequest.getPassword(),
                 createUserRequest.getFirstName(),
                 createUserRequest.getLastName());
@@ -50,6 +49,16 @@ public class UserController {
                 userService.getAll().stream()
                         .map(userTransformer::transform)
                         .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserTO> findById(@PathVariable(name = "userId") Long userId) {
+        try {
+            return ResponseEntity.ok(
+                    userTransformer.transform(userService.findById(userId)));
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
