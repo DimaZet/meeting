@@ -1,6 +1,9 @@
 package ru.party.meeting;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.party.meeting.dto.CreateUserRequest;
 import ru.party.meeting.dto.LoginUserRequest;
+import ru.party.meeting.dto.UserTO;
 import ru.party.meeting.service.RoleService;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,32 +36,37 @@ class MeetingApplicationTests {
 
 	private static String token;
 
+    private final static ObjectMapper mapper = new ObjectMapper()
+            .findAndRegisterModules()
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
 	@BeforeAll
 	static void before(@Autowired RoleService roleService, @Autowired MockMvc mockMvc) throws Exception {
-		roleService.createRole("ROLE_USER");
+        assertThat(roleService.createRole("ROLE_USER"))
+                .isNotNull();
 
-		ObjectMapper mapper = new ObjectMapper();
 		String registerMe = mapper.writeValueAsString(
 				new CreateUserRequest("admin", "admin", "admin", "admin"));
-
-		mockMvc.perform(post("/api/users/register")
+        String registeredUserJson = mockMvc.perform(post("/api/users/register")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(registerMe))
-				.andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        UserTO registeredUser = mapper.readValue(registeredUserJson, UserTO.class);
+        assertThat(registeredUser).hasNoNullFieldsOrProperties();
 
-		String loginMe = mapper.writeValueAsString(
+        String loginRequestJson = mapper.writeValueAsString(
 				new LoginUserRequest("admin", "admin"));
-
 		token = mockMvc.perform(get("/tokens")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(loginMe))
+                .content(loginRequestJson))
 				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
+        assertThat(token).isNotNull();
 	}
 
 	@Test
 	void testRegisterManyUsers() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
 		String userOne = mapper.writeValueAsString(
 				new CreateUserRequest("one", "admin", "admin", "admin"));
 		String userTwo = mapper.writeValueAsString(
@@ -64,19 +74,20 @@ class MeetingApplicationTests {
 		String userThree = mapper.writeValueAsString(
 				new CreateUserRequest("three", "admin", "admin", "admin"));
 
-		mockMvc.perform(post("/api/roles")
-				.param("name", "USER"))
-				.andDo(print())
-				.andExpect(status().isForbidden());
-
-		register(userOne)
+        String registeredUserOneJson = register(userOne)
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("id").isNotEmpty())
-				.andExpect(jsonPath("username").value("one"))
-				.andExpect(jsonPath("firstName").value("admin"))
-				.andExpect(jsonPath("lastName").value("admin"))
-				.andExpect(jsonPath("roles[0].name").value("ROLE_USER"));
-		register(userOne).andExpect(status().isBadRequest()); //Twice registration
+                .andReturn().getResponse().getContentAsString();
+        UserTO registeredUserOne = mapper.readValue(registeredUserOneJson, UserTO.class);
+        assertThat(registeredUserOne).satisfies(u -> {
+            assertThat(u.getId()).isNotNull();
+            assertThat(u.getUsername()).isEqualTo("one");
+            assertThat(u.getFirstName()).isEqualTo("admin");
+            assertThat(u.getLastName()).isEqualTo("admin");
+            assertThat(u.getRoles()).satisfies(roleTOS -> {
+                assertThat(roleTOS).hasSize(1);
+                assertThat(roleTOS.get(0).getName()).isEqualTo("ROLE_USER");
+            });
+        });
 		register(userTwo).andExpect(status().isOk());
 		register(userThree).andExpect(status().isOk());
 
@@ -85,10 +96,19 @@ class MeetingApplicationTests {
 				.andDo(print())
 				.andExpect(status().isOk());
 
-		mockMvc.perform(get("/api/users")
+        String usersJson = mockMvc.perform(get("/api/users")
 				.header("Authorization", "Bearer " + token))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse().getContentAsString();
+
+        List<UserTO> users = mapper.readValue(usersJson,
+                mapper.getTypeFactory().constructCollectionType(List.class, UserTO.class));
+
+        assertThat(users)
+                .hasSize(4)
+                .allSatisfy(userTO -> assertThat(userTO).hasNoNullFieldsOrProperties());
 	}
 
 	@Test

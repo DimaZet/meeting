@@ -2,14 +2,28 @@ package ru.party.meeting.dto;
 
 import java.time.Instant;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 public class RoleTO {
     private long id;
     private Instant createdAt;
     private Instant updatedAt;
     private String name;
+
+    @JsonCreator
+    public RoleTO(
+            @JsonProperty("id") long id,
+            @JsonProperty("createdAt") Instant createdAt,
+            @JsonProperty("updatedAt") Instant updatedAt,
+            @JsonProperty("name") String name) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.name = name;
+    }
 }

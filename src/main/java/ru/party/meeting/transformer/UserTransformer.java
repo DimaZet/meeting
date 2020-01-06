@@ -12,6 +12,8 @@ public class UserTransformer {
     public UserTO transform(User user) {
         return new UserTO(
                 user.getId(),
+                user.getCreatedAt(),
+                user.getUpdatedAt(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
