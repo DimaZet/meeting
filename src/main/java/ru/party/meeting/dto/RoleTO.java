@@ -1,5 +1,7 @@
 package ru.party.meeting.dto;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,5 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class RoleTO {
     private long id;
+    private Instant createdAt;
+    private Instant updatedAt;
     private String name;
 }

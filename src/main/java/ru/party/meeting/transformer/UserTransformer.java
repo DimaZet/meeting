@@ -21,6 +21,10 @@ public class UserTransformer {
     }
 
     public RoleTO transform(Role role) {
-        return new RoleTO(role.getId(), role.getName());
+        return new RoleTO(
+                role.getId(),
+                role.getCreatedAt(),
+                role.getUpdatedAt(),
+                role.getName());
     }
 }

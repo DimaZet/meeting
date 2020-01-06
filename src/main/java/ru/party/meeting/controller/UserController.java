@@ -30,7 +30,7 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest) {
         User user = new User(createUserRequest.getLogin(),
                 createUserRequest.getPassword(),
