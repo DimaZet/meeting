@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -22,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.party.meeting.exception.JwtAuthenticationException;
 import ru.party.meeting.model.Role;
+import ru.party.meeting.model.User;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -48,14 +48,6 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
     private Date getExpirationDateFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getExpiration();
     }
@@ -74,9 +66,9 @@ public class JwtTokenUtil implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    public String createToken(String username, List<Role> roles) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", getRoleNames(roles));
+    public String createTokenForUser(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("roles", getRoleNames(user.getRoles()));
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

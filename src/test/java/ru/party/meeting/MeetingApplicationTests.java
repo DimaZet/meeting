@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import ru.party.meeting.dto.CreateEventRequest;
 import ru.party.meeting.dto.CreateUserRequest;
 import ru.party.meeting.dto.LoginUserRequest;
 import ru.party.meeting.dto.MeetingEventTO;
@@ -116,8 +117,11 @@ class MeetingApplicationTests {
     void testPostEvent_successfully() throws Exception {
 		String title = "let's go cinema";
 		String description = "tomorrow i'd like to go cinema with girl";
-        String postedEventJson = mockMvc.perform(post("/api/events?title={title}&description={description}", title,
-                description)
+        String createEventJson = mapper.writeValueAsString(
+                new CreateEventRequest(title, description));
+        String postedEventJson = mockMvc.perform(post("/api/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createEventJson)
 				.header("Authorization", "Bearer " + token))
 				.andDo(print())
 				.andExpect(status().is(200))

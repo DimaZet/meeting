@@ -21,7 +21,7 @@ import ru.party.meeting.security.JwtTokenUtil;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SucurityConfig extends WebSecurityConfigurerAdapter {
+public class SucurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
@@ -30,8 +30,8 @@ public class SucurityConfig extends WebSecurityConfigurerAdapter {
 //    private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    public SucurityConfig(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil,
-                          PasswordEncoder passwordEncoder, DataSource dataSource) {
+    public SucurityConfiguration(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil,
+                                 PasswordEncoder passwordEncoder, DataSource dataSource) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.passwordEncoder = passwordEncoder;

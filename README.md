@@ -11,9 +11,11 @@
         --name psql -p 5432:5432 -d postgres
    ```
 3. Configure `Run/Debug Configurations` Intellij IDEA window:
-    * Add `DOCKER_IP` equals your ip address from `$ docker-machine ip`
-    * Add `MONGO_CLUSTER=${DOCKER_IP}:27017`
-    * Add `POSTGRES_CLUSTER${DOCKER_IP}:5432` 
+    * Environment variables:
+        * Add `JWT_SECRET` equals your secret for jwt token
+        * Add `DOCKER_IP` equals your ip address from `$ docker-machine ip`
+        * Add `MONGO_CLUSTER=${DOCKER_IP}:27017`
+        * Add `POSTGRES_CLUSTER=${DOCKER_IP}:5432`
     * Put `development` into `Active profiles`
 
 ### Use application api
@@ -25,7 +27,7 @@
    Content-Type: application/json
    
    {
-       "login": "YOUR_LOGIN",
+       "username": "YOUR_LOGIN",
        "password": "YOUR_PASWORD",
        "firstName": "YOUR_FNAME",
        "lastName": "YOUR_SNAME"

@@ -7,8 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import ru.party.meeting.dto.CreateEventRequest;
 import ru.party.meeting.dto.MeetingEventTO;
 import ru.party.meeting.service.MeetingEventService;
 import ru.party.meeting.transformer.MeetingEventTransformer;
@@ -25,11 +26,10 @@ public class MeetingEventController {
     }
 
     @PostMapping
-    public ResponseEntity<MeetingEventTO> createEvent(
-            @RequestParam(name = "title") String title, @RequestParam(name = "description") String description) {
+    public ResponseEntity<MeetingEventTO> createEvent(@RequestBody CreateEventRequest request) {
         return ResponseEntity.ok(
                 transformer.transform(
-                        meetingEventService.createEvent(title, description)));
+                        meetingEventService.createEvent(request.getTitle(), request.getDescription())));
     }
 
     @GetMapping
