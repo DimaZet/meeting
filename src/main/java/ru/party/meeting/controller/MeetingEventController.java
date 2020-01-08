@@ -1,36 +1,42 @@
 package ru.party.meeting.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.party.meeting.model.MeetingEvent;
+import ru.party.meeting.dto.CreateEventRequest;
+import ru.party.meeting.dto.MeetingEventTO;
 import ru.party.meeting.service.MeetingEventService;
+import ru.party.meeting.transformer.MeetingEventTransformer;
 
 @Controller
-@RequestMapping(path = "/api")
+@RequestMapping("/api/events")
 public class MeetingEventController {
 
     private final MeetingEventService meetingEventService;
+    private final MeetingEventTransformer transformer = new MeetingEventTransformer();
 
     public MeetingEventController(MeetingEventService meetingEventService) {
         this.meetingEventService = meetingEventService;
     }
 
-    @PostMapping("/events")
-    public ResponseEntity<MeetingEvent> createEvent(
-            @RequestParam(name = "title") String title, @RequestParam(name = "description") String description) {
+    @PostMapping
+    public ResponseEntity<MeetingEventTO> createEvent(@RequestBody CreateEventRequest request) {
         return ResponseEntity.ok(
-                meetingEventService.createEvent(title, description));
+                transformer.transform(
+                        meetingEventService.createEvent(request.getTitle(), request.getDescription())));
     }
 
-    @GetMapping("/events")
-    public ResponseEntity<List<MeetingEvent>> getAllEvents() {
+    @GetMapping
+    public ResponseEntity<List<MeetingEventTO>> getAllEvents() {
         return ResponseEntity.ok(
-                meetingEventService.getAllEvents());
+                meetingEventService.getAllEvents().stream()
+                        .map(transformer::transform)
+                        .collect(Collectors.toList()));
     }
 }
