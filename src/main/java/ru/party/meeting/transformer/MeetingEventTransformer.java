@@ -1,7 +1,9 @@
 package ru.party.meeting.transformer;
 
 import ru.party.meeting.dto.MeetingEventTO;
+import ru.party.meeting.dto.StatusTO;
 import ru.party.meeting.model.MeetingEvent;
+import ru.party.meeting.model.Status;
 
 public class MeetingEventTransformer {
 
@@ -13,6 +15,20 @@ public class MeetingEventTransformer {
                 event.getCreatedBy(),
                 event.getLastModifiedBy(),
                 event.getTitle(),
-                event.getDescription());
+                event.getDescription(),
+                transform(event.getStatus()));
+    }
+
+    private StatusTO transform(Status status) {
+        switch (status) {
+            case ACTIVE:
+                return StatusTO.ACTIVE;
+            case BANNED:
+                return StatusTO.BANNED;
+            case DELETED:
+                return StatusTO.DELETED;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

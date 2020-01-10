@@ -1,5 +1,6 @@
 package ru.party.meeting;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,12 +20,15 @@ import ru.party.meeting.dto.CreateEventRequest;
 import ru.party.meeting.dto.CreateUserRequest;
 import ru.party.meeting.dto.LoginUserRequest;
 import ru.party.meeting.dto.MeetingEventTO;
+import ru.party.meeting.dto.StatusTO;
 import ru.party.meeting.dto.UserTO;
 import ru.party.meeting.service.RoleService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -145,6 +149,69 @@ class MeetingApplicationTests {
                 meetingEventTO -> assertThat(meetingEventTO).hasNoNullFieldsOrProperties()
         );
 	}
+
+    @Test
+    void testCRUDEvent_successfully() throws Exception {
+        //CREATE
+        String title = "let's go cinema";
+        String description = "tomorrow i'd like to go cinema with girl";
+        String postedEventJson = mockMvc.perform(post("/api/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new CreateEventRequest(title, description)))
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().is(200))
+                .andReturn().getResponse().getContentAsString();
+        MeetingEventTO postedEvent = mapper.readValue(postedEventJson, MeetingEventTO.class);
+        assertThat(postedEvent).satisfies(event -> {
+            assertThat(event.getTitle()).isEqualTo(title);
+            assertThat(event.getDescription()).isEqualTo(description);
+            assertThat(event).hasNoNullFieldsOrProperties();
+        });
+        UUID eventId = postedEvent.getId();
+        Instant createdAt = postedEvent.getCreatedAt();
+        Instant updatedAt = postedEvent.getUpdatedAt();
+        //READ
+        String gotByIdEventJson = mockMvc.perform(get("/api/events/{id}", eventId)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().is(200))
+                .andReturn().getResponse().getContentAsString();
+        MeetingEventTO gotByIdEvent = mapper.readValue(gotByIdEventJson, MeetingEventTO.class);
+        assertThat(gotByIdEvent).isEqualToIgnoringGivenFields(postedEvent,
+                "createdAt", "updatedAt"); //TODO
+        //UPDATE
+        String updatedTitle = "let's go cinema";
+        String updatedDescription = "tomorrow i'd like to go cinema with girl";
+        String updatedEventJson = mockMvc.perform(put("/api/events?" +
+                "id={id}&title={title}&description={description}", eventId, updatedTitle, updatedDescription)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        MeetingEventTO updatedEvent = mapper.readValue(updatedEventJson, MeetingEventTO.class);
+        assertThat(updatedEvent).satisfies(event -> {
+            assertThat(event.getId()).isEqualTo(eventId);
+            assertThat(event.getTitle()).isEqualTo(updatedTitle);
+            assertThat(event.getDescription()).isEqualTo(updatedDescription);
+            //assertThat(event.getCreatedAt()).isEqualTo(createdAt); //TODO
+            //assertThat(event.getUpdatedAt()).isAfter(updatedAt); //TODO
+            assertThat(event).hasNoNullFieldsOrProperties();
+        });
+        //DELETE
+        String deletedEventJson = mockMvc.perform(delete("/api/events/{id}", eventId)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNoContent())
+                .andReturn().getResponse().getContentAsString();
+        assertThat(deletedEventJson).isEmpty();
+        //FIND DELETED
+        String foundDeletedEventJson = mockMvc.perform(get("/api/events/{id}", eventId)
+                .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        MeetingEventTO foundDeletedEvent = mapper.readValue(foundDeletedEventJson, MeetingEventTO.class);
+        assertThat(foundDeletedEvent).satisfies(event -> {
+            assertThat(event.getStatus()).isEqualTo(StatusTO.DELETED);
+            assertThat(event).hasNoNullFieldsOrProperties();
+        });
+    }
 
     @Test
     void testUnauthorizedPostEvent() throws Exception {
