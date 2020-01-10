@@ -20,7 +20,7 @@ public class HTMLMeetingEventController {
 
     @GetMapping
     public String getAllEvents(Model model) {
-        model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        model.addAttribute("eventsList", meetingEventService.findAllEvents());
         model.addAttribute("added", false);
         return "events-list";
     }
@@ -30,7 +30,7 @@ public class HTMLMeetingEventController {
             @RequestParam(name = "title") String title, @RequestParam(name = "description") String description,
             Model model) {
         meetingEventService.createEvent(title, description);
-        model.addAttribute("eventsList", meetingEventService.getAllEvents());
+        model.addAttribute("eventsList", meetingEventService.findAllEvents());
         model.addAttribute("added", true);
         return "events-list";
     }

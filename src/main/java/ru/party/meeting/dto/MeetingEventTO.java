@@ -18,6 +18,7 @@ public class MeetingEventTO {
     private String lastModifiedBy;
     private String title;
     private String description;
+    private StatusTO status;
 
     @JsonCreator
     public MeetingEventTO(
@@ -27,7 +28,8 @@ public class MeetingEventTO {
             @JsonProperty("createdBy") String createdBy,
             @JsonProperty("lastModifiedBy") String lastModifiedBy,
             @JsonProperty("title") String title,
-            @JsonProperty("description") String description) {
+            @JsonProperty("description") String description,
+            @JsonProperty("status") StatusTO status) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -35,5 +37,6 @@ public class MeetingEventTO {
         this.lastModifiedBy = lastModifiedBy;
         this.title = title;
         this.description = description;
+        this.status = status;
     }
 }

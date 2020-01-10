@@ -42,6 +42,9 @@ public class MeetingEvent {
     @LastModifiedBy
     @Field
     private String lastModifiedBy;
+
+    @Field
+    private Status status = Status.ACTIVE;
   
     @Version
     private long version;
