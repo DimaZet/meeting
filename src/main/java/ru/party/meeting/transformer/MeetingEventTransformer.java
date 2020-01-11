@@ -1,7 +1,10 @@
 package ru.party.meeting.transformer;
 
+import java.time.Instant;
+
 import ru.party.meeting.dto.MeetingEventTO;
 import ru.party.meeting.dto.StatusTO;
+import ru.party.meeting.model.ElasticMeetingEvent;
 import ru.party.meeting.model.MeetingEvent;
 import ru.party.meeting.model.Status;
 
@@ -12,6 +15,18 @@ public class MeetingEventTransformer {
                 event.getId(),
                 event.getCreatedAt(),
                 event.getUpdatedAt(),
+                event.getCreatedBy(),
+                event.getLastModifiedBy(),
+                event.getTitle(),
+                event.getDescription(),
+                transform(event.getStatus()));
+    }
+
+    public MeetingEventTO transform(ElasticMeetingEvent event) {
+        return new MeetingEventTO(
+                event.getId(),
+                Instant.parse(event.getCreatedAt()),
+                Instant.parse(event.getUpdatedAt()),
                 event.getCreatedBy(),
                 event.getLastModifiedBy(),
                 event.getTitle(),

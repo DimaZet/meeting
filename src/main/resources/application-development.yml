@@ -1,6 +1,6 @@
 jwt:
   token:
-    secret: ${JWT_SECRET}
+    secret: sample_secret
     expired: 3_600_000
 
 spring:
@@ -19,3 +19,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_CLUSTER}/meeting
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: ${ELASTIC_CLUSTER}
+  elasticsearch:
+    rest:
+      uris: ${ELASTIC_CLUSTER}

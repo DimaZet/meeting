@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 import ru.party.meeting.exception.NotFoundException;
 import ru.party.meeting.model.MeetingEvent;
 import ru.party.meeting.model.Status;
-import ru.party.meeting.repository.MeetingEventRepository;
+import ru.party.meeting.repository.MeetingEventMongoRepository;
 
 @Slf4j
 @Service
 public class MeetingEventService {
 
-    private final MeetingEventRepository meetingEventRepository;
+    private final MeetingEventMongoRepository meetingEventRepository;
 
-    public MeetingEventService(MeetingEventRepository meetingEventRepository) {
+    public MeetingEventService(MeetingEventMongoRepository meetingEventRepository) {
         this.meetingEventRepository = meetingEventRepository;
     }
 

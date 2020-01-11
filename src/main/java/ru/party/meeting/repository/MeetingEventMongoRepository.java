@@ -5,5 +5,5 @@ import java.util.UUID;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.party.meeting.model.MeetingEvent;
 
-public interface MeetingEventRepository extends MongoRepository<MeetingEvent, UUID> {
+public interface MeetingEventMongoRepository extends MongoRepository<MeetingEvent, UUID> {
 }

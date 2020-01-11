@@ -3,6 +3,8 @@ package ru.party.meeting.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import ru.party.meeting.transformer.UserTransformer;
 
 @Controller
 @RequestMapping(path = "/api/users")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -30,14 +33,20 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest)
-            throws NotFoundException, UserAlreadyRegisteredException {
+    public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest) {
         User user = new User(createUserRequest.getUsername(),
                 createUserRequest.getPassword(),
                 createUserRequest.getFirstName(),
                 createUserRequest.getLastName());
-        return ResponseEntity.ok(
-                userTransformer.transform(userService.registerWithDefaultRole(user)));
+        try {
+            return ResponseEntity.ok(
+                    userTransformer.transform(userService.registerWithDefaultRole(user)));
+        } catch (UserAlreadyRegisteredException e) {
+            return ResponseEntity.badRequest().body("Already registered");
+        } catch (NotFoundException e) {
+            log.error("In registerUser: USER_ROLE not found", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping

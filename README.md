@@ -2,20 +2,25 @@
 
 1. Run mongo in docker:
    ```
-   docker run --rm --name mongodb -p 27017:27017 -d mongo
+   docker run --rm -d --name mongodb -p 27017:27017 mongo
    ```
 2. Run postgres in docker from project directory:
    ```
-   docker run --rm -v $(PWD)/src/main/resources/postgres/:/docker-entrypoint-initdb.d/ \
+   docker run --rm -d -v $(PWD)/src/main/resources/postgres/:/docker-entrypoint-initdb.d/ \
         -e POSTGRES_DB=meeting -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
-        --name psql -p 5432:5432 -d postgres
+        --name psql -p 5432:5432 postgres
+   ```
+3. Run elasticsearch in docker:
+   ```
+   docker run --rm -d --name elastic -p 9200:9200 -p 9300:9300 \
+        -e "discovery.type=single-node" elasticsearch:7.5.1
    ```
 3. Configure `Run/Debug Configurations` Intellij IDEA window:
     * Environment variables:
-        * Add `JWT_SECRET` equals your secret for jwt token
         * Add `DOCKER_IP` equals your ip address from `$ docker-machine ip`
         * Add `MONGO_CLUSTER=${DOCKER_IP}:27017`
         * Add `POSTGRES_CLUSTER=${DOCKER_IP}:5432`
+        * Add `ELASTIC_CLUSTER=${DOCKER_IP}:9200,${DOCKER_IP}:9300`
     * Put `development` into `Active profiles`
 
 ### Use application api
