@@ -16,13 +16,3 @@ spring:
       hibernate:
         dialect:
           org.hibernate.dialect.PostgreSQLDialect
-  data:
-    mongodb:
-      uri: mongodb://${MONGO_CLUSTER}/meeting
-    elasticsearch:
-      client:
-        reactive:
-          endpoints: ${ELASTIC_CLUSTER}
-  elasticsearch:
-    rest:
-      uris: ${ELASTIC_CLUSTER}
