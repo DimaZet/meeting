@@ -7,3 +7,6 @@ spring:
   elasticsearch:
     rest:
       uris: ${ELASTIC_CLUSTER}
+
+server:
+  port: 8083

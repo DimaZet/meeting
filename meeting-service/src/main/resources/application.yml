@@ -2,3 +2,5 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_CLUSTER}/meeting
+server:
+  port: 8082

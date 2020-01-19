@@ -21,6 +21,18 @@ public class MeetingEventTransformer {
                 transform(event.getStatus()));
     }
 
+    public MeetingEvent transform(MeetingEventTO event) {
+        return new MeetingEvent(
+                event.getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getUpdatedAt().toString(),
+                event.getCreatedAt().toString(),
+                event.getCreatedBy(),
+                event.getLastModifiedBy(),
+                transform(event.getStatus()));
+    }
+
     private StatusTO transform(Status status) {
         switch (status) {
             case ACTIVE:
@@ -29,6 +41,19 @@ public class MeetingEventTransformer {
                 return StatusTO.BANNED;
             case DELETED:
                 return StatusTO.DELETED;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    private Status transform(StatusTO status) {
+        switch (status) {
+            case ACTIVE:
+                return Status.ACTIVE;
+            case BANNED:
+                return Status.BANNED;
+            case DELETED:
+                return Status.DELETED;
             default:
                 throw new IllegalArgumentException();
         }
