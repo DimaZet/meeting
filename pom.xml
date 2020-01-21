@@ -16,6 +16,7 @@
     <module>gateway-service</module>
     <module>meeting-service</module>
     <module>search-service</module>
+    <module>search-service-client</module>
   </modules>
 
 </project>

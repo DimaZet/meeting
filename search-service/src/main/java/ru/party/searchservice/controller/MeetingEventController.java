@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.party.searchservice.dto.MeetingEventTO;
+import ru.party.searchservice.model.MeetingEvent;
 import ru.party.searchservice.service.MeetingEventService;
 import ru.party.searchservice.transformer.MeetingEventTransformer;
 
@@ -27,11 +28,12 @@ public class MeetingEventController {
         this.meetingEventService = meetingEventService;
     }
 
-    @PutMapping
-    public ResponseEntity index(@RequestBody MeetingEventTO meetingEventTO) {
+    @PutMapping("/index")
+    public ResponseEntity<MeetingEventTO> index(@RequestBody MeetingEventTO meetingEventTO) {
+        MeetingEvent indexed = meetingEventService.index(
+                transformer.transform(meetingEventTO));
         return ResponseEntity.ok(
-                meetingEventService.index(
-                        transformer.transform(meetingEventTO)));
+                transformer.transform(indexed));
     }
 
     @GetMapping("/find")
