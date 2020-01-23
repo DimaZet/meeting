@@ -1,0 +1,12 @@
+spring:
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: ${ELASTIC_CLUSTER}
+  elasticsearch:
+    rest:
+      uris: ${ELASTIC_CLUSTER}
+
+server:
+  port: 8083

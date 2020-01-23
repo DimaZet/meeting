@@ -1,0 +1,9 @@
+jwt:
+  token:
+    secret: mysecretword
+    expired: 3_600_000
+
+spring:
+  elasticsearch:
+    rest:
+      uris: ${ELASTIC_CLUSTER}
