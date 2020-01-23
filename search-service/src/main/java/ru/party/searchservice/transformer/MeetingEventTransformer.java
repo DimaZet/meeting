@@ -26,8 +26,8 @@ public class MeetingEventTransformer {
                 event.getId(),
                 event.getTitle(),
                 event.getDescription(),
-                event.getUpdatedAt().toString(),
                 event.getCreatedAt().toString(),
+                event.getUpdatedAt().toString(),
                 event.getCreatedBy(),
                 event.getLastModifiedBy(),
                 transform(event.getStatus()));
