@@ -8,11 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.party.searcservice.client.dto.MeetingEventTO;
-
-@Component
 public class SearchServiceClient {
 
     private final String baseUrl;
@@ -27,11 +23,12 @@ public class SearchServiceClient {
         this.indexEndpoint = indexEndpoint;
     }
 
-    public MeetingEventTO index(MeetingEventTO eventTO) {
+    public String index(String json) {
         return getResult(
                 indexEndpoint,
                 HttpMethod.PUT,
-                MeetingEventTO.class,
+                json,
+                String.class,
                 null
         );
     }
@@ -39,12 +36,13 @@ public class SearchServiceClient {
     private <T> T getResult(
             @NonNull String url,
             @NonNull HttpMethod method,
+            String json,
             @NonNull Class<T> t,
             @Nullable Map<String, Object> uriVariables) {
         return client.exchange(
                 baseUrl + url,
                 method,
-                HttpEntity.EMPTY,
+                new HttpEntity<>(json),
                 t,
                 uriVariables
         ).getBody();

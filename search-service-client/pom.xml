@@ -10,6 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>ru.party</groupId>
     <artifactId>search-service-client</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>search-service-client</name>
@@ -67,14 +68,4 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

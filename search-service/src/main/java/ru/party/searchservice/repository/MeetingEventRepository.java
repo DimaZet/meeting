@@ -11,6 +11,5 @@ import ru.party.searchservice.model.MeetingEvent;
 @Repository
 public interface MeetingEventRepository extends ElasticsearchRepository<MeetingEvent, UUID> {
     List<MeetingEvent> findAll();
-
     List<MeetingEvent> search(QueryBuilder var1);
 }
