@@ -2,10 +2,14 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_CLUSTER}/meeting
+  redis:
+    url: redis://${REDIS_URL}
+    topic: meetingEventQueue
+
 server:
   port: 8082
+
 searchservice:
   api:
     url: "http://localhost:8083/api/events"
     index: "/index"
-

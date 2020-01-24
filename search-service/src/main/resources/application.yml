@@ -4,6 +4,11 @@ spring:
       client:
         reactive:
           endpoints: ${ELASTIC_CLUSTER}
+  redis:
+    #    url: redis://${REDIS_URL}
+    topic: meetingEventQueue
+    host: ${DOCKER_IP}
+    port: 6379
   elasticsearch:
     rest:
       uris: ${ELASTIC_CLUSTER}
