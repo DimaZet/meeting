@@ -3,10 +3,15 @@ spring:
     elasticsearch:
       client:
         reactive:
-          endpoints: ${ELASTIC_CLUSTER}
+          endpoints: ${DOCKER_IP}:9200
+  redis:
+    #    url: redis://${REDIS_URL}
+    topic: meetingEventQueue
+    host: ${DOCKER_IP}
+    port: 6379
   elasticsearch:
     rest:
-      uris: ${ELASTIC_CLUSTER}
+      uris: ${DOCKER_IP}:9200
 
 server:
   port: 8083

@@ -9,7 +9,6 @@
 2. Configure `Run/Debug Configurations` Intellij IDEA window:
     * Environment variables:
         * Add `DOCKER_IP` equals your ip address from `$ docker-machine ip`
-        * Add `POSTGRES_CLUSTER=${DOCKER_IP}:5432`
 
 ### Use application api
 

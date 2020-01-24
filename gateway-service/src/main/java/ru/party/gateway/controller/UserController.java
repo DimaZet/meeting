@@ -31,13 +31,18 @@ public class UserController {
 
     @PostMapping("register")
     public ResponseEntity registerUser(@RequestBody CreateUserRequest createUserRequest)
-            throws NotFoundException, UserAlreadyRegisteredException {
+            throws NotFoundException {
         User user = new User(createUserRequest.getUsername(),
                 createUserRequest.getPassword(),
                 createUserRequest.getFirstName(),
                 createUserRequest.getLastName());
-        return ResponseEntity.ok(
-                userTransformer.transform(userService.registerWithDefaultRole(user)));
+        try {
+            return ResponseEntity.ok(
+                    userTransformer.transform(userService.registerWithDefaultRole(user)));
+        } catch (UserAlreadyRegisteredException e) {
+            return ResponseEntity.badRequest()
+                    .body("Такой пользователь уже зарегистрирован");
+        }
     }
 
     @GetMapping
