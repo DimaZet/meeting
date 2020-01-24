@@ -1,9 +1,9 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://${MONGO_CLUSTER}/meeting
+      uri: mongodb://${DOCKER_IP}:27017/meeting
   redis:
-    url: redis://${REDIS_URL}
+    url: redis://${DOCKER_IP}:6379
     topic: meetingEventQueue
 
 server:

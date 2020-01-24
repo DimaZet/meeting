@@ -15,7 +15,7 @@ jwt:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_CLUSTER}/meeting
+    url: jdbc:postgresql://${DOCKER_IP}:5432/meeting
     username: postgres
     password: postgres
   jpa:
