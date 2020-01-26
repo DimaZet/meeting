@@ -4,10 +4,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 import lombok.Data;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,11 +33,9 @@ public class MeetingEvent {
     @Field
     private Instant updatedAt;
 
-    @CreatedBy
     @Field
     private String createdBy;
   
-    @LastModifiedBy
     @Field
     private String lastModifiedBy;
 

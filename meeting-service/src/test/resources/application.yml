@@ -1,0 +1,12 @@
+spring:
+  redis:
+    url: redis://localhost:6379
+    topic: meetingEventQueue
+
+server:
+  port: 8082
+
+searchservice:
+  api:
+    url: "http://localhost:8083/api/events"
+    index: "/index"
