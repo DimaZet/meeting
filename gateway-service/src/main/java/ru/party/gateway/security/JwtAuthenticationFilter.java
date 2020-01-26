@@ -7,10 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.netflix.zuul.context.RequestContext;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,7 +74,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 logger.error("JwtAuthenticationException cause of: {}", e.getCause());
             }
         }
-
+        addUsernameHeaderIfExist(username);
         filterChain.doFilter(request, response);
+    }
+
+    private void addUsernameHeaderIfExist(@Nullable String username) {
+        if (StringUtils.isNotEmpty(username)) {
+            RequestContext.getCurrentContext().addZuulRequestHeader("username", username);
+        }
     }
 }
