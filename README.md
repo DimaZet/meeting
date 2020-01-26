@@ -22,11 +22,11 @@ All configurations in a nutshell:
     
 1. Run databases:
    ```
+   docker run --rm -d --name mongodb -p 27017:27017 mongo
+   
    docker run --rm -d -v $(PWD)/gateway-service/src/main/resources/postgres/:/docker-entrypoint-initdb.d/ \
            -e POSTGRES_DB=meeting -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres \
            --name psql -p 5432:5432 postgres
-   
-   docker run --rm -d --name mongodb -p 27017:27017 mongo
    
    docker run --rm -d --name redis -p 6379:6379 redis
    
